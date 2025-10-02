@@ -5,60 +5,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useState } from "react";
-
-//todo: remove mock functionality
-const mockStickers = [
-  {
-    id: "1",
-    name: "Office Laptop",
-    batteryLevel: 75,
-    rssi: -65,
-    assetName: "MacBook Pro 16",
-    location: "Office - Desk 12",
-    lastSeen: new Date(Date.now() - 5 * 60 * 1000),
-    status: "active",
-  },
-  {
-    id: "2",
-    name: "Warehouse Tool",
-    batteryLevel: 45,
-    rssi: -78,
-    assetName: "Power Drill",
-    location: "Warehouse - Shelf A3",
-    lastSeen: new Date(Date.now() - 15 * 60 * 1000),
-    status: "active",
-  },
-  {
-    id: "3",
-    name: "Store Display",
-    batteryLevel: 15,
-    rssi: -85,
-    assetName: "Luxury Watch",
-    location: "Store - Display Case 2",
-    lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    status: "low battery",
-  },
-  {
-    id: "4",
-    name: "Meeting Room",
-    batteryLevel: 92,
-    rssi: -55,
-    assetName: "Projector Remote",
-    location: "Floor 3 - Room 301",
-    lastSeen: new Date(Date.now() - 30 * 60 * 1000),
-    status: "active",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import type { Sticker } from "@shared/schema";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState<string>("All");
 
-  //todo: remove mock functionality
-  const activeCount = mockStickers.filter(s => s.status === "active").length;
-  const lowBatteryCount = mockStickers.filter(s => s.batteryLevel < 20).length;
+  const { data: stickers = [], isLoading } = useQuery<Sticker[]>({
+    queryKey: ["stickers"],
+    queryFn: async () => {
+      const response = await fetch("/api/stickers");
+      if (!response.ok) {
+        throw new Error("Failed to fetch stickers");
+      }
+      return response.json();
+    },
+  });
 
-  const filteredStickers = mockStickers.filter(sticker => {
+  const activeCount = stickers.filter(s => s.status === "active").length;
+  const lowBatteryCount = stickers.filter(s => s.batteryLevel < 20).length;
+
+  const filteredStickers = stickers.filter(sticker => {
     const matchesSearch = sticker.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       sticker.assetName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       sticker.location?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -71,6 +39,14 @@ export default function Dashboard() {
     return matchesSearch;
   });
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Loading stickers...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="px-4 py-6 space-y-6 max-w-7xl mx-auto">
@@ -82,7 +58,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatsCard
             title="Total Stickers"
-            value={mockStickers.length}
+            value={stickers.length}
             icon={Layers}
             description={`${activeCount} active`}
           />
@@ -100,7 +76,7 @@ export default function Dashboard() {
           />
           <StatsCard
             title="BLE Devices"
-            value={mockStickers.length}
+            value={stickers.length}
             icon={Bluetooth}
             description="Total tracked"
           />
@@ -139,6 +115,7 @@ export default function Dashboard() {
             <StickerCard
               key={sticker.id}
               {...sticker}
+              lastSeen={new Date(sticker.lastSeen)}
               onClick={() => console.log(`View details for ${sticker.name}`)}
             />
           ))}

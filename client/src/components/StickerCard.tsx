@@ -10,8 +10,8 @@ interface StickerCardProps {
   name: string;
   batteryLevel: number;
   rssi: number;
-  assetName?: string;
-  location?: string;
+  assetName?: string | null;
+  location?: string | null;
   lastSeen: Date;
   status: string;
   onClick?: () => void;

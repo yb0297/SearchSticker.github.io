@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Plus, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { Sticker } from "@shared/schema";
 import {
   Select,
   SelectContent,
@@ -11,76 +13,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-//todo: remove mock functionality
-const mockStickers = [
-  {
-    id: "1",
-    name: "Office Laptop",
-    batteryLevel: 75,
-    rssi: -65,
-    assetName: "MacBook Pro 16",
-    location: "Office - Desk 12",
-    lastSeen: new Date(Date.now() - 5 * 60 * 1000),
-    status: "active",
-  },
-  {
-    id: "2",
-    name: "Warehouse Tool",
-    batteryLevel: 45,
-    rssi: -78,
-    assetName: "Power Drill",
-    location: "Warehouse - Shelf A3",
-    lastSeen: new Date(Date.now() - 15 * 60 * 1000),
-    status: "active",
-  },
-  {
-    id: "3",
-    name: "Store Display",
-    batteryLevel: 15,
-    rssi: -85,
-    assetName: "Luxury Watch",
-    location: "Store - Display Case 2",
-    lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    status: "low battery",
-  },
-  {
-    id: "4",
-    name: "Meeting Room",
-    batteryLevel: 92,
-    rssi: -55,
-    assetName: "Projector Remote",
-    location: "Floor 3 - Room 301",
-    lastSeen: new Date(Date.now() - 30 * 60 * 1000),
-    status: "active",
-  },
-  {
-    id: "5",
-    name: "Inventory Item",
-    batteryLevel: 60,
-    rssi: -72,
-    assetName: "Scanner Device",
-    location: "Warehouse - Zone B",
-    lastSeen: new Date(Date.now() - 1 * 60 * 60 * 1000),
-    status: "active",
-  },
-  {
-    id: "6",
-    name: "Reception Tablet",
-    batteryLevel: 88,
-    rssi: -58,
-    assetName: "iPad Pro",
-    location: "Reception Desk",
-    lastSeen: new Date(Date.now() - 10 * 60 * 1000),
-    status: "active",
-  },
-];
-
 export default function Devices() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("name");
   const [filterStatus, setFilterStatus] = useState("all");
 
-  const filteredAndSorted = mockStickers
+  const { data: stickers = [], isLoading } = useQuery<Sticker[]>({
+    queryKey: ["stickers"],
+    queryFn: async () => {
+      const response = await fetch("/api/stickers");
+      if (!response.ok) {
+        throw new Error("Failed to fetch stickers");
+      }
+      return response.json();
+    },
+  });
+
+  const filteredAndSorted = stickers
     .filter(sticker => {
       const matchesSearch = sticker.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         sticker.assetName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -97,9 +46,17 @@ export default function Devices() {
       if (sortBy === "name") return a.name.localeCompare(b.name);
       if (sortBy === "battery") return b.batteryLevel - a.batteryLevel;
       if (sortBy === "signal") return b.rssi - a.rssi;
-      if (sortBy === "recent") return b.lastSeen.getTime() - a.lastSeen.getTime();
+      if (sortBy === "recent") return new Date(b.lastSeen).getTime() - new Date(a.lastSeen).getTime();
       return 0;
     });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Loading devices...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -162,6 +119,7 @@ export default function Devices() {
             <StickerCard
               key={sticker.id}
               {...sticker}
+              lastSeen={new Date(sticker.lastSeen)}
               onClick={() => console.log(`View details for ${sticker.name}`)}
             />
           ))}
