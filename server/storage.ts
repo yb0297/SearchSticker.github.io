@@ -27,6 +27,8 @@ export class MemStorage implements IStorage {
         rssi: -65,
         assetName: "MacBook Pro 16",
         location: "Office - Desk 12",
+        latitude: 40.7589,
+        longitude: -73.9851,
         lastSeen: new Date(Date.now() - 5 * 60 * 1000),
         status: "active",
       },
@@ -38,6 +40,8 @@ export class MemStorage implements IStorage {
         rssi: -78,
         assetName: "Power Drill",
         location: "Warehouse - Shelf A3",
+        latitude: 40.7410,
+        longitude: -73.9896,
         lastSeen: new Date(Date.now() - 15 * 60 * 1000),
         status: "active",
       },
@@ -49,6 +53,8 @@ export class MemStorage implements IStorage {
         rssi: -85,
         assetName: "Luxury Watch",
         location: "Store - Display Case 2",
+        latitude: 40.7614,
+        longitude: -73.9776,
         lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000),
         status: "low battery",
       },
@@ -60,6 +66,8 @@ export class MemStorage implements IStorage {
         rssi: -55,
         assetName: "Projector Remote",
         location: "Floor 3 - Room 301",
+        latitude: 40.7527,
+        longitude: -73.9772,
         lastSeen: new Date(Date.now() - 30 * 60 * 1000),
         status: "active",
       },
@@ -84,7 +92,9 @@ export class MemStorage implements IStorage {
       ...insertSticker, 
       id,
       assetName: insertSticker.assetName ?? null,
-      location: insertSticker.location ?? null
+      location: insertSticker.location ?? null,
+      latitude: insertSticker.latitude ?? null,
+      longitude: insertSticker.longitude ?? null
     };
     this.stickers.set(id, sticker);
     return sticker;

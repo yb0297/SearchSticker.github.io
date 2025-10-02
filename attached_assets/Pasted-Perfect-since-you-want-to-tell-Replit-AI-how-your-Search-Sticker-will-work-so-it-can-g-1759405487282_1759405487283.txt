@@ -1,0 +1,94 @@
+Perfect 🚀 — since you want to tell **Replit AI** how your **Search Sticker** will work (so it can generate a realistic website), you’ll need to describe the **hardware → data → app flow** in simple, dev-friendly terms. Think of it as telling Replit: *“assume my prototype works like this, now build me a web app for it.”*
+
+Here’s a **ready-to-paste explanation/prompt** that captures your device’s workflow for Replit:
+
+---
+
+My device is called **Search Sticker**. It’s a thin BLE + IR powered tracker that can be stuck onto objects (like laptops, tools, or shop displays). Assume the prototype is ready. The website should simulate how the stickers work in real life.
+
+### How the Sticker Works (for simulation)
+
+1. Each sticker has a **unique ID** (like STK001, STK002).
+2. It has a **button cell battery** that powers:
+
+   * IR sensor (detects activity/interaction).
+   * BLE chip (broadcasts ID + status).
+3. The **phone app or BLE gateway** scans for nearby stickers.
+4. The sticker reports data to the app:
+
+   * Sticker ID
+   * Assigned Object (Laptop, Drill Machine, etc.)
+   * Battery % (OK / Low)
+   * Signal strength (RSSI → near/far)
+   * Last seen timestamp
+5. The web app should show this data on a **dashboard**.
+
+### Web App Requirements
+
+* **Dashboard**: List all stickers with ID, object, sector (Office/Factory/Shop), battery %, status, last seen.
+* **Find Button**: Clicking triggers a “blink” or animation (simulating sticker being found).
+* **Add Sticker**: Form to register a new sticker.
+* **Radar Map (Detector View)**: Show proximity (near/medium/far) using a circular radar simulation, based on RSSI values.
+* **Analytics**:
+
+  * % of stickers low on battery.
+  * Distribution by sector.
+  * Average battery left.
+* **Docs Page**: Explain product details (concept, components, cost breakdown, drawbacks & solutions).
+
+### Tech Stack (free tools only)
+
+* React + TailwindCSS for frontend.
+* Node.js + Express backend (mock API).
+* JSON file as database (simulated sticker data).
+* Leaflet.js or Canvas/D3.js for radar detector view.
+* Chart.js or Recharts for analytics.
+* Everything must run fully inside Replit free tier.
+
+### Demo Data (for simulation)
+
+```json
+[
+  {
+    "id": "STK001",
+    "object": "Laptop",
+    "sector": "Office",
+    "battery": 78,
+    "status": "OK",
+    "rssi": -48,
+    "lastSeen": "2025-10-01 14:30"
+  },
+  {
+    "id": "STK002",
+    "object": "Drill Machine",
+    "sector": "Factory",
+    "battery": 52,
+    "status": "OK",
+    "rssi": -68,
+    "lastSeen": "2025-10-01 13:20"
+  },
+  {
+    "id": "STK003",
+    "object": "Display Case",
+    "sector": "Luxury Shop",
+    "battery": 20,
+    "status": "Low Battery",
+    "rssi": -85,
+    "lastSeen": "2025-10-01 12:10"
+  }
+]
+```
+
+Build a **complete website** with these features, simulating how the Search Sticker would work in the real world.
+
+---
+
+---
+
+⚡ This way, Replit will clearly understand:
+
+* What your hardware does.
+* What data it should simulate.
+* How the site should display it (dashboard + radar + analytics + docs).
+
+👉 Do you want me to now **prepare a starter JSON + React code skeleton** for you so Replit won’t just simulate but already show the **dashboard and radar detector** on first run?

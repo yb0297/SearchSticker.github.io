@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, timestamp, doublePrecision } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -11,6 +11,8 @@ export const stickers = pgTable("stickers", {
   rssi: integer("rssi").notNull(),
   assetName: text("asset_name"),
   location: text("location"),
+  latitude: doublePrecision("latitude"),
+  longitude: doublePrecision("longitude"),
   lastSeen: timestamp("last_seen").notNull(),
   status: text("status").notNull(),
 });
