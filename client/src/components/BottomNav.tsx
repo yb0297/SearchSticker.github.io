@@ -1,4 +1,4 @@
-import { Home, Layers, FileText, Menu } from "lucide-react";
+import { Home, Layers, Radar as RadarIcon, Menu } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 export function BottomNav() {
@@ -7,7 +7,7 @@ export function BottomNav() {
   const navItems = [
     { path: "/", icon: Home, label: "Dashboard" },
     { path: "/devices", icon: Layers, label: "Devices" },
-    { path: "/docs", icon: FileText, label: "Docs" },
+    { path: "/radar", icon: RadarIcon, label: "Radar" },
     { path: "/more", icon: Menu, label: "More" },
   ];
 

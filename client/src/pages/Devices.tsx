@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Search, Plus, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { Sticker } from "@shared/schema";
+import type { Sticker } from "@shared/types";
 import {
   Select,
   SelectContent,

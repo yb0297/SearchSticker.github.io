@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { Sticker } from "@shared/schema";
+import type { Sticker } from "@shared/types";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");

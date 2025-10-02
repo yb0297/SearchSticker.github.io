@@ -7,6 +7,8 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { BottomNav } from "@/components/BottomNav";
 import Dashboard from "@/pages/Dashboard";
 import Devices from "@/pages/Devices";
+import Radar from "@/pages/Radar";
+import Map from "@/pages/Map";
 import Documentation from "@/pages/Documentation";
 import More from "@/pages/More";
 import NotFound from "@/pages/not-found";
@@ -17,6 +19,8 @@ function Router() {
       <Switch>
         <Route path="/" component={Dashboard} />
         <Route path="/devices" component={Devices} />
+        <Route path="/radar" component={Radar} />
+        <Route path="/map" component={Map} />
         <Route path="/docs" component={Documentation} />
         <Route path="/more" component={More} />
         <Route component={NotFound} />
